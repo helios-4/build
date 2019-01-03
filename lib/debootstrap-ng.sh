@@ -168,6 +168,11 @@ create_rootfs_cache()
 		# stage: create apt sources list
 		create_sources_list "$RELEASE" "$SDCARD/"
 
+		# stage: add Kobol repository and install key
+		echo "deb https://apt.kobol.io $RELEASE main" > $SDCARD/etc/apt/sources.list.d/00-kobol.list
+		eval 'chroot $SDCARD /bin/bash -c "wget -O - https://apt.kobol.io/kobol.key | apt-key add -"' \
+			${OUTPUT_VERYSILENT:+' >/dev/null 2>/dev/null'}
+
 		# stage: add armbian repository and install key
 		echo "deb http://apt.armbian.com $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > $SDCARD/etc/apt/sources.list.d/armbian.list
 
