@@ -1,8 +1,7 @@
-From 2a5ca8a0192955eed229d42f35d3f47f66901c2f Mon Sep 17 00:00:00 2001
-Message-Id: <2a5ca8a0192955eed229d42f35d3f47f66901c2f.1595156897.git.adit.prayoga@gmail.com>
+From 16bab6b001c6c4f698c98a10be261de9ab61d7fc Mon Sep 17 00:00:00 2001
 From: Aditya Prayoga <aditya@kobol.io>
-Date: Fri, 29 May 2020 01:48:01 +0700
-Subject: [PATCH] add helios64 board
+Date: Thu, 30 Jul 2020 14:58:31 +0700
+Subject: [PATCH] Patching something
 
 Signed-off-by: Aditya Prayoga <aditya@kobol.io>
 ---
@@ -14,14 +13,24 @@ Signed-off-by: Aditya Prayoga <aditya@kobol.io>
  board/kobol/helios64/MAINTAINERS         |    6 +
  board/kobol/helios64/Makefile            |    5 +
  board/kobol/helios64/helios64.c          |  256 +++++
- board/kobol/helios64/sys_otp.c           |  248 +++++
+ board/kobol/helios64/sys_otp.c           |  246 +++++
  board/kobol/helios64/sys_otp.h           |   10 +
  configs/helios64_defconfig               |  141 +++
  include/configs/helios64.h               |   47 +
- 12 files changed, 2030 insertions(+)
+ 12 files changed, 2028 insertions(+)
+ create mode 100644 arch/arm/dts/rk3399-helios64-u-boot.dtsi
+ create mode 100644 arch/arm/dts/rk3399-helios64.dts
+ create mode 100644 board/kobol/helios64/Kconfig
+ create mode 100644 board/kobol/helios64/MAINTAINERS
+ create mode 100644 board/kobol/helios64/Makefile
+ create mode 100644 board/kobol/helios64/helios64.c
+ create mode 100644 board/kobol/helios64/sys_otp.c
+ create mode 100644 board/kobol/helios64/sys_otp.h
+ create mode 100644 configs/helios64_defconfig
+ create mode 100644 include/configs/helios64.h
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 771787c0..4614553f 100644
+index 771787c03..4614553f3 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
 @@ -119,6 +119,7 @@ dtb-$(CONFIG_ROCKCHIP_RK3399) += \
@@ -34,7 +43,7 @@ index 771787c0..4614553f 100644
  	rk3399-khadas-edge-v.dtb \
 diff --git a/arch/arm/dts/rk3399-helios64-u-boot.dtsi b/arch/arm/dts/rk3399-helios64-u-boot.dtsi
 new file mode 100644
-index 00000000..a579947b
+index 000000000..a579947bf
 --- /dev/null
 +++ b/arch/arm/dts/rk3399-helios64-u-boot.dtsi
 @@ -0,0 +1,126 @@
@@ -166,7 +175,7 @@ index 00000000..a579947b
 +};
 diff --git a/arch/arm/dts/rk3399-helios64.dts b/arch/arm/dts/rk3399-helios64.dts
 new file mode 100644
-index 00000000..d5f1df67
+index 000000000..d5f1df674
 --- /dev/null
 +++ b/arch/arm/dts/rk3399-helios64.dts
 @@ -0,0 +1,1149 @@
@@ -1320,7 +1329,7 @@ index 00000000..d5f1df67
 +	status = "okay";
 +};
 diff --git a/arch/arm/mach-rockchip/rk3399/Kconfig b/arch/arm/mach-rockchip/rk3399/Kconfig
-index 927bb62a..9ff1213e 100644
+index 927bb62a9..9ff1213e0 100644
 --- a/arch/arm/mach-rockchip/rk3399/Kconfig
 +++ b/arch/arm/mach-rockchip/rk3399/Kconfig
 @@ -19,6 +19,22 @@ config TARGET_EVB_RK3399
@@ -1356,7 +1365,7 @@ index 927bb62a..9ff1213e 100644
  source "board/theobroma-systems/puma_rk3399/Kconfig"
 diff --git a/board/kobol/helios64/Kconfig b/board/kobol/helios64/Kconfig
 new file mode 100644
-index 00000000..4d40e0e8
+index 000000000..4d40e0e82
 --- /dev/null
 +++ b/board/kobol/helios64/Kconfig
 @@ -0,0 +1,24 @@
@@ -1386,7 +1395,7 @@ index 00000000..4d40e0e8
 +endif
 diff --git a/board/kobol/helios64/MAINTAINERS b/board/kobol/helios64/MAINTAINERS
 new file mode 100644
-index 00000000..a9c88c79
+index 000000000..a9c88c79e
 --- /dev/null
 +++ b/board/kobol/helios64/MAINTAINERS
 @@ -0,0 +1,6 @@
@@ -1398,7 +1407,7 @@ index 00000000..a9c88c79
 +F:	configs/helios64_defconfig
 diff --git a/board/kobol/helios64/Makefile b/board/kobol/helios64/Makefile
 new file mode 100644
-index 00000000..a92a4237
+index 000000000..a92a4237d
 --- /dev/null
 +++ b/board/kobol/helios64/Makefile
 @@ -0,0 +1,5 @@
@@ -1409,7 +1418,7 @@ index 00000000..a92a4237
 +obj-y	:= helios64.o sys_otp.o
 diff --git a/board/kobol/helios64/helios64.c b/board/kobol/helios64/helios64.c
 new file mode 100644
-index 00000000..9f0ea82e
+index 000000000..9f0ea82ec
 --- /dev/null
 +++ b/board/kobol/helios64/helios64.c
 @@ -0,0 +1,256 @@
@@ -1671,10 +1680,10 @@ index 00000000..9f0ea82e
 +#endif
 diff --git a/board/kobol/helios64/sys_otp.c b/board/kobol/helios64/sys_otp.c
 new file mode 100644
-index 00000000..add5251c
+index 000000000..4606a3f34
 --- /dev/null
 +++ b/board/kobol/helios64/sys_otp.c
-@@ -0,0 +1,248 @@
+@@ -0,0 +1,246 @@
 +#include <linux/types.h>
 +#include <dm.h>
 +#include <spi.h>
@@ -1756,7 +1765,6 @@ index 00000000..add5251c
 +			"Invalid variant",
 +			"Engineering Sample",
 +			"Production - 4GB non ECC"
-+			""
 +	};
 +
 +	printf("\n");
@@ -1869,8 +1877,7 @@ index 00000000..add5251c
 +	const char* var_str[BOARD_VARIANT_MAX] = {
 +		"Unknown",
 +		"Engineering Sample",
-+		"4GB non ECC",
-+		""
++		"4GB non ECC"
 +	};
 +
 +	if ((otp.variant < BOARD_VARIANT_ENG_SAMPLE) ||
@@ -1925,7 +1932,7 @@ index 00000000..add5251c
 +}
 diff --git a/board/kobol/helios64/sys_otp.h b/board/kobol/helios64/sys_otp.h
 new file mode 100644
-index 00000000..61f6f3b3
+index 000000000..61f6f3b38
 --- /dev/null
 +++ b/board/kobol/helios64/sys_otp.h
 @@ -0,0 +1,10 @@
@@ -1941,7 +1948,7 @@ index 00000000..61f6f3b3
 +#endif
 diff --git a/configs/helios64_defconfig b/configs/helios64_defconfig
 new file mode 100644
-index 00000000..472a8ed5
+index 000000000..472a8ed5b
 --- /dev/null
 +++ b/configs/helios64_defconfig
 @@ -0,0 +1,141 @@
@@ -2088,7 +2095,7 @@ index 00000000..472a8ed5
 +CONFIG_HEXDUMP=y
 diff --git a/include/configs/helios64.h b/include/configs/helios64.h
 new file mode 100644
-index 00000000..6fca9a6b
+index 000000000..6fca9a6be
 --- /dev/null
 +++ b/include/configs/helios64.h
 @@ -0,0 +1,47 @@
@@ -2140,5 +2147,5 @@ index 00000000..6fca9a6b
 +
 +#endif
 -- 
-2.17.1
+Created with Armbian build tools https://github.com/armbian/build
 
