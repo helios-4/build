@@ -1,0 +1,35 @@
+From f7d67edb81429149ebf65184c9fcd33bf5198265 Mon Sep 17 00:00:00 2001
+From: Aditya Prayoga <aditya@kobol.io>
+Date: Mon, 3 Aug 2020 14:57:08 +0700
+Subject: [PATCH] Enable r8152 USB Remote Wake up support
+
+Signed-off-by: Aditya Prayoga <aditya@kobol.io>
+---
+ drivers/net/usb/r8152.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 8e3490a3c..768377bc2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -3104,7 +3104,7 @@ static void rxdy_gated_en(struct r8152 *tp, bool enable)
+ 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MISC_1, ocp_data);
+ }
+ 
+-#if defined(RTL8152_S5_WOL) && defined(CONFIG_PM)
++#if defined(CONFIG_PM)
+ static int rtl_s5_wol(struct r8152 *tp)
+ {
+ 	struct usb_device *udev = tp->udev;
+@@ -9329,7 +9329,7 @@ static int rtl8152_close(struct net_device *netdev)
+ 		else
+ 			rtl_speed_down(tp);
+ 
+-#if defined(RTL8152_S5_WOL) && defined(CONFIG_PM)
++#if defined(CONFIG_PM)
+ 		res = rtl_s5_wol(tp);
+ #endif
+ 		mutex_unlock(&tp->control);
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+
